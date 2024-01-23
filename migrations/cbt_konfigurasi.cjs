@@ -9,7 +9,8 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        autoIncrement: true
       },
       konfigurasi_kode: {
         type: Sequelize.STRING,
@@ -24,6 +25,8 @@ module.exports = {
         allowNull: false
       },
     });
+    await queryInterface.addIndex('cbt_konfigurasi', ['konfigurasi_id'], { name: 'PRIMARY' });
+    await queryInterface.addIndex('cbt_konfigurasi', ['konfigurasi_kode'], { unique: true, name: 'konfigurasi_kode' });
   },
 
   down: async (queryInterface, Sequelize) => {

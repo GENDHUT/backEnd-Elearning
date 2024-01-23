@@ -9,7 +9,8 @@ module.exports = {
         type: Sequelize.DataTypes.BIGINT(20),
         allowNull: false,
         primaryKey: true,
-        unsigned: true
+        unsigned: true,
+        autoIncrement: true
       },
       jawaban_soal_id: {
         type: Sequelize.DataTypes.BIGINT(20),
@@ -32,7 +33,9 @@ module.exports = {
         defaultValue: 0
       }
     });
-  },
+    await queryInterface.addIndex('cbt_jawaban', ['jawaban_id'], { name: 'PRIMARY' });
+    await queryInterface.addIndex('cbt_jawaban', ['jawaban_soal_id'], { name: 'p_answer_question_id' });
+},
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('cbt_jawaban');

@@ -69,6 +69,8 @@ module.exports = {
         defaultValue: 0,
       },
     });
+    await queryInterface.addIndex('cbt_tes', ['tes_id'], { name: 'PRIMARY' });
+    await queryInterface.addIndex('cbt_tes', ['tes_nama'], { name: 'ak_test_name', unique: true });
   },
 
   down: async (queryInterface, Sequelize) => {

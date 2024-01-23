@@ -25,6 +25,8 @@ module.exports = {
         allowNull: false
       }
     });
+    await queryInterface.addIndex('cbt_sessions', ['id'], { name: 'PRIMARY' });
+    await queryInterface.addIndex('cbt_sessions', ['timestamp'], { name: 'ci_sessions_timestamp' });
   },
 
   down: async (queryInterface, Sequelize) => {

@@ -7,6 +7,7 @@ module.exports = {
         type: Sequelize.BIGINT(20).UNSIGNED,
         allowNull: false,
         primaryKey: true,
+        autoIncrement: true
       },
       soal_topik_id: {
         type: Sequelize.BIGINT(20).UNSIGNED,
@@ -64,6 +65,10 @@ module.exports = {
         defaultValue: 0,
       },
     });
+    await queryInterface.addIndex('cbt_soal', ['soal_id'], { name: 'PRIMARY' });
+    await queryInterface.addIndex('cbt_soal', ['soal_topik_id'], { name: 'p_question_subject_id' });
+    await queryInterface.sequelize.query('ALTER TABLE `cbt_soal` AUTO_INCREMENT = 215;');
+
   },
 
   down: async (queryInterface, Sequelize) => {

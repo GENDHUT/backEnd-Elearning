@@ -7,11 +7,11 @@ import jwt from 'jsonwebtoken';
 import bcrypt, { hash } from 'bcrypt';
 import cookieParser from 'cookie-parser';
 import { Sequelize } from "sequelize";
-
-
+import dotenv from 'dotenv';
 
 // Use App
 // const sequelize = require('./config/database');
+dotenv.config({ path: 'development.env' });
 const { verify } = jwt;
 const salt = 10;
 const app = express();
@@ -135,9 +135,13 @@ app.get('/logout',(req,res)=>{
 })
 
 // LiveKit
-const createToken = (roomName,participantName) => {
 
-  const at = new AccessToken('API5iYTLG3z4z9q', 'n42QGNIPteDf4g4U0wVm80vqznRvUfItDGC2P4NqpeqA', {
+
+const createToken = (roomName,participantName) => {
+const apiKey = process.env.LK_API_KEY;
+const apiSecret = process.env.LK_API_SECRET;
+
+  const at = new AccessToken( apiKey, apiSecret, {
     identity: participantName,
   });
   at.addGrant({ roomJoin: true, room: roomName });
