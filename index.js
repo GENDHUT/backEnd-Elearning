@@ -6,9 +6,12 @@ import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import bcrypt, { hash } from 'bcrypt';
 import cookieParser from 'cookie-parser';
+import { Sequelize } from "sequelize";
+
 
 
 // Use App
+// const sequelize = require('./config/database');
 const { verify } = jwt;
 const salt = 10;
 const app = express();
@@ -22,8 +25,17 @@ app.use(cors({
 app.use(cookieParser());
 
 // Connect DB
+// sequelize.sync()
+//   .then(() => {
+//     console.log('Tabel disinkronkan');
+//   })
+//   .catch((err) => {
+//     console.error('Terjadi kesalahan saat menyinkronkan tabel:', err);
+//   });
+
 const db = mysql.createConnection({
     host: "localhost",
+    port: "3307",
     user: "root",
     password: "",
     database: "elearning_db"
@@ -125,7 +137,7 @@ app.get('/logout',(req,res)=>{
 // LiveKit
 const createToken = (roomName,participantName) => {
 
-  const at = new AccessToken('APINRrXAe2mZ7Z2', 'u2zkmCmBIHdGdSecnsMqowauMtmvDBJvqiu23DZdI8D', {
+  const at = new AccessToken('API5iYTLG3z4z9q', 'n42QGNIPteDf4g4U0wVm80vqznRvUfItDGC2P4NqpeqA', {
     identity: participantName,
   });
   at.addGrant({ roomJoin: true, room: roomName });
@@ -134,6 +146,7 @@ const createToken = (roomName,participantName) => {
 }
 
 app.post('/getToken', (req, res) => {
+  console.log(res.body)
   const {roomName,participantName}=req.body
   res.json({
     success:true,
