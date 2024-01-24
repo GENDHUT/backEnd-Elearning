@@ -13,3 +13,6 @@ Jangan Lupa Instal Dependency
 ```cmd
 npm install
 ```
+
+Jangan Lupa Mengganti example.env menjadi development.env
+
