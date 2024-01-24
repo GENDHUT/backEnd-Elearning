@@ -17,11 +17,11 @@ module.exports = {
       },
       token_user_id: {
         allowNull: false,
-        type: Sequelize.INTEGER(11)
+        type: Sequelize.BIGINT(20).UNSIGNED,
       },
       token_ts: {
         allowNull: false,
-        type: Sequelize.TIMESTAMP,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       token_aktif: {
@@ -35,8 +35,21 @@ module.exports = {
         defaultValue: 0
       }
     });
-    await queryInterface.addIndex('cbt_tes_token', ['token_id'], { name: 'PRIMARY' });
+    await queryInterface.addConstraint('cbt_tes_token', {
+      fields: ['token_user_id'],
+      type: 'foreign key',
+      name: 'cbt_tes_token_ibfk_1',
+      references: {
+        table: 'user',
+        field: 'id'
+      },
+      onDelete: 'cascade',
+      onUpdate: 'no action'
+    });
+
+    await queryInterface.addIndex('cbt_tes_token', ['token_id'], { name: 'token_id' });
     await queryInterface.addIndex('cbt_tes_token', ['token_user_id'], { name: 'token_user_id' });
+    await queryInterface.sequelize.query('ALTER TABLE `cbt_tes_token` AUTO_INCREMENT = 13;');
   },
 
   down: async (queryInterface, Sequelize) => {

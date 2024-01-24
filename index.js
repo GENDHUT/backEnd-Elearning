@@ -135,8 +135,6 @@ app.get('/logout',(req,res)=>{
 })
 
 // LiveKit
-
-
 const createToken = (roomName,participantName) => {
 const apiKey = process.env.LK_API_KEY;
 const apiSecret = process.env.LK_API_SECRET;

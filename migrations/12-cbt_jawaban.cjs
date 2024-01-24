@@ -6,16 +6,15 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('cbt_jawaban', {
       jawaban_id: {
-        type: Sequelize.DataTypes.BIGINT(20),
+        type: Sequelize.BIGINT(20).UNSIGNED,
         allowNull: false,
         primaryKey: true,
         unsigned: true,
         autoIncrement: true
       },
       jawaban_soal_id: {
-        type: Sequelize.DataTypes.BIGINT(20),
+        type: Sequelize.BIGINT(20).UNSIGNED,
         allowNull: false,
-        unsigned: true
       },
       jawaban_detail: {
         type: Sequelize.DataTypes.TEXT,
@@ -33,7 +32,18 @@ module.exports = {
         defaultValue: 0
       }
     });
-    await queryInterface.addIndex('cbt_jawaban', ['jawaban_id'], { name: 'PRIMARY' });
+    await queryInterface.addConstraint('cbt_jawaban', {
+      fields: ['jawaban_soal_id'],
+      type: 'foreign key',
+      name: 'cbt_jawaban_ibfk_1',
+      references: {
+        table: 'cbt_soal',
+        field: 'soal_id'
+      },
+      onDelete: 'cascade',
+      onUpdate: 'no action'
+    });
+    await queryInterface.addIndex('cbt_jawaban', ['jawaban_id'], { name: 'jawaban_id' });
     await queryInterface.addIndex('cbt_jawaban', ['jawaban_soal_id'], { name: 'p_answer_question_id' });
 },
 

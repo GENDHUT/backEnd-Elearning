@@ -28,7 +28,7 @@ module.exports = {
         defaultValue: null,
       },
       user_regdate: {
-        type: Sequelize.TIMESTAMP,
+        type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
@@ -58,13 +58,23 @@ module.exports = {
         defaultValue: null,
       },
     });
-    await queryInterface.addIndex('cbt_user', ['user_id'], { name: 'PRIMARY' });
+    await queryInterface.addConstraint('cbt_user', {
+      fields: ['user_grup_id'],
+      type: 'foreign key',
+      name: 'cbt_user_ibfk_1',
+      references: {
+        table: 'cbt_user_grup',
+        field: 'grup_id'
+      },
+      onDelete: 'cascade',
+      onUpdate: 'no action'
+    });
+
+    await queryInterface.addIndex('cbt_user', ['user_id'], { name: 'user_id' });
     await queryInterface.addIndex('cbt_user', ['user_name'], { name: 'ak_user_name', unique: true });
     await queryInterface.addIndex('cbt_user', ['user_grup_id'], { name: 'user_groups_id' });
     await queryInterface.addIndex('cbt_user', ['user_detail'], { name: 'user_detail' });
-    // await queryInterface.addIndex('user', ['id'], { name: 'PRIMARY' });
-    await queryInterface.addIndex('cbt_user', ['username'], { name: 'username', unique: true });
-    await queryInterface.addIndex('cbt_user', ['level'], { name: 'level' });
+    await queryInterface.sequelize.query('ALTER TABLE `cbt_user` AUTO_INCREMENT = 3;');
   },
 
   down: async (queryInterface, Sequelize) => {

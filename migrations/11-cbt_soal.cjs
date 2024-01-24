@@ -65,9 +65,20 @@ module.exports = {
         defaultValue: 0,
       },
     });
-    await queryInterface.addIndex('cbt_soal', ['soal_id'], { name: 'PRIMARY' });
+    await queryInterface.addConstraint('cbt_soal', {
+      fields: ['soal_topik_id'],
+      type: 'foreign key',
+      name: 'cbt_soal_ibfk_1',
+      references: {
+        table: 'cbt_topik',
+        field: 'topik_id'
+      },
+      onDelete: 'cascade',
+      onUpdate: 'no action'
+    });
+    await queryInterface.addIndex('cbt_soal', ['soal_id'], { name: 'soal_id' });
     await queryInterface.addIndex('cbt_soal', ['soal_topik_id'], { name: 'p_question_subject_id' });
-    await queryInterface.sequelize.query('ALTER TABLE `cbt_soal` AUTO_INCREMENT = 215;');
+    // await queryInterface.sequelize.query('ALTER TABLE `cbt_soal` AUTO_INCREMENT = 215;');
 
   },
 

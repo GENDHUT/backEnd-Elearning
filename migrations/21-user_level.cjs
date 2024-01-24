@@ -17,8 +17,9 @@ module.exports = {
           type: Sequelize.STRING(100)
         }
       });
-        await queryInterface.addIndex('user_level', ['id'], { name: 'PRIMARY' });
+        await queryInterface.addIndex('user_level', ['id'], { name: 'id' });
         await queryInterface.addIndex('user_level', ['level'], { name: 'level', unique: true });
+        await queryInterface.sequelize.query('ALTER TABLE `user_level` AUTO_INCREMENT = 9;');
     },
     down: async (queryInterface, Sequelize) => {
       await queryInterface.dropTable('user_level');

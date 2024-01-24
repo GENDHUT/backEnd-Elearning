@@ -44,8 +44,9 @@ module.exports = {
         allowNull: false,
       },
     });
-    await queryInterface.addIndex('user_menu', ['id'], { name: 'PRIMARY' });
+    await queryInterface.addIndex('user_menu', ['id'], { name: 'id' });
     await queryInterface.addIndex('user_menu', ['kode_menu'], { unique: true, name: 'kode_menu' });
+    await queryInterface.sequelize.query('ALTER TABLE `user_menu` AUTO_INCREMENT = 44;');
   },
 
   down: async (queryInterface, Sequelize) => {

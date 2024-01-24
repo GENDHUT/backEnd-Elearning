@@ -6,12 +6,12 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('cbt_tesgrup', {
       tstgrp_tes_id: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.BIGINT(20).UNSIGNED,
         allowNull: false,
         primaryKey: true,
       },
       tstgrp_grup_id: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.BIGINT(20).UNSIGNED,
         allowNull: false,
         primaryKey: true,
       },
@@ -24,8 +24,6 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
-
-    // Add foreign key constraint
     await queryInterface.addConstraint('cbt_tesgrup', {
       fields: ['tstgrp_tes_id'],
       type: 'foreign key',
@@ -34,31 +32,29 @@ module.exports = {
         table: 'cbt_tes',
         field: 'tes_id',
       },
-      onDelete: 'cascade',
-      onUpdate: 'cascade',
+      onDelete: 'CASCADE', 
+      onUpdate: 'NO ACTION',
     });
 
-    // Add foreign key constraint
     await queryInterface.addConstraint('cbt_tesgrup', {
       fields: ['tstgrp_grup_id'],
       type: 'foreign key',
       name: 'fk_tstgrp_grup_id',
       references: {
-        table: 'grup',
+        table: 'cbt_user_grup',
         field: 'grup_id',
       },
-      onDelete: 'cascade',
-      onUpdate: 'cascade',
+      onDelete: 'CASCADE', 
+      onUpdate: 'NO ACTION',
     });
-    await queryInterface.addIndex('cbt_tes', ['tes_id'], { name: 'PRIMARY' });
-    await queryInterface.addIndex('cbt_tes', ['tes_nama'], { name: 'ak_test_name', unique: true });
+
+    // await queryInterface.addIndex('cbt_tes', ['tes_id'], { name: 'tes_id' });
+    // await queryInterface.addIndex('cbt_tes', ['tes_nama'], { name: 'ak_test_name', unique: true });
   },
 
   down: async (queryInterface, Sequelize) => {
-    // Remove foreign key constraint
     await queryInterface.removeConstraint('cbt_tesgrup', 'fk_tstgrp_tes_id');
     await queryInterface.removeConstraint('cbt_tesgrup', 'fk_tstgrp_grup_id');
-
     await queryInterface.dropTable('cbt_tesgrup');
   }
 };

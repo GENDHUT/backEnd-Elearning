@@ -6,7 +6,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('cbt_tes', {
       tes_id: {
-        type: Sequelize.BIGINT(20),
+        type: Sequelize.BIGINT(20).UNSIGNED,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
@@ -69,8 +69,9 @@ module.exports = {
         defaultValue: 0,
       },
     });
-    await queryInterface.addIndex('cbt_tes', ['tes_id'], { name: 'PRIMARY' });
+    await queryInterface.addIndex('cbt_tes', ['tes_id'], { name: 'tes_id' });
     await queryInterface.addIndex('cbt_tes', ['tes_nama'], { name: 'ak_test_name', unique: true });
+    await queryInterface.sequelize.query('ALTER TABLE `cbt_tes` AUTO_INCREMENT = 6;');
   },
 
   down: async (queryInterface, Sequelize) => {

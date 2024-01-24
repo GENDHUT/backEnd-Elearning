@@ -70,10 +70,34 @@ module.exports = {
         defaultValue: 0
       }
     });
-    await queryInterface.addIndex('cbt_tes_soal', ['tessoal_id'], { name: 'PRIMARY' });
+    await queryInterface.addConstraint('cbt_tes_soal', {
+      fields: ['tessoal_tesuser_id'],
+      type: 'foreign key',
+      name: 'cbt_tes_soal_ibfk_1',
+      references: {
+        table: 'cbt_tes_user',
+        field: 'tesuser_id'
+      },
+      onDelete: 'cascade',
+      onUpdate: 'no action'
+    });
+
+    await queryInterface.addConstraint('cbt_tes_soal', {
+      fields: ['tessoal_soal_id'],
+      type: 'foreign key',
+      name: 'cbt_tes_soal_ibfk_2',
+      references: {
+        table: 'cbt_soal',
+        field: 'soal_id'
+      },
+      onUpdate: 'no action'
+    });
+
+    await queryInterface.addIndex('cbt_tes_soal', ['tessoal_id'], { name: 'tessoal_id' });
     await queryInterface.addIndex('cbt_tes_soal', ['tessoal_tesuser_id', 'tessoal_soal_id'], { name: 'ak_testuser_question', unique: true });
     await queryInterface.addIndex('cbt_tes_soal', ['tessoal_soal_id'], { name: 'p_testlog_question_id' });
     await queryInterface.addIndex('cbt_tes_soal', ['tessoal_tesuser_id'], { name: 'p_testlog_testuser_id' });
+    await queryInterface.sequelize.query('ALTER TABLE `cbt_tes_soal` AUTO_INCREMENT = 41;');
   },
 
   down: async (queryInterface, Sequelize) => {

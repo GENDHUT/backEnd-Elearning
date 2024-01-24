@@ -6,7 +6,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('user', {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT(20).UNSIGNED,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
@@ -45,6 +45,22 @@ module.exports = {
         allowNull: false,
       },
     });
+    await queryInterface.addConstraint('user', {
+      fields: ['level'],
+      type: 'foreign key',
+      name: 'user_ibfk_1',
+      references: {
+        table: 'user_level',
+        field: 'level'
+      },
+      onDelete: 'cascade',
+      onUpdate: 'cascade'
+    });
+
+    await queryInterface.sequelize.query('ALTER TABLE `user` AUTO_INCREMENT = 6;');
+    await queryInterface.addIndex('user', ['id'], { name: 'id' });
+    await queryInterface.addIndex('user', ['username'], { name: 'username', unique: true });
+    await queryInterface.addIndex('user', ['level'], { name: 'level' });
   },
 
   down: async (queryInterface, Sequelize) => {

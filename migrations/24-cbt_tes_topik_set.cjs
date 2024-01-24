@@ -13,13 +13,11 @@ module.exports = {
         UNSIGNED: true
       },
       tset_tes_id: {
-        type: Sequelize.BIGINT(20),
-        UNSIGNED: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
         allowNull: false
       },
       tset_topik_id: {
-        type: Sequelize.BIGINT(20),
-        UNSIGNED: true,
+        type: Sequelize.BIGINT(20).UNSIGNED,
         allowNull: false
       },
       tset_tipe: {
@@ -53,9 +51,34 @@ module.exports = {
         defaultValue: 1
       },
     });
-    await queryInterface.addIndex('cbt_tes_topik_set', ['tset_id'], { name: 'PRIMARY' });
+    await queryInterface.addConstraint('cbt_tes_topik_set', {
+      fields: ['tset_tes_id'],
+      type: 'foreign key',
+      name: 'cbt_tes_topik_set_ibfk_1',
+      references: {
+        table: 'cbt_tes',
+        field: 'tes_id'
+      },
+      onDelete: 'cascade',
+      onUpdate: 'no action'
+    });
+
+    await queryInterface.addConstraint('cbt_tes_topik_set', {
+      fields: ['tset_topik_id'],
+      type: 'foreign key',
+      name: 'cbt_tes_topik_set_ibfk_2',
+      references: {
+        table: 'cbt_topik',
+        field: 'topik_id'
+      },
+      onDelete: 'no action',
+      onUpdate: 'no action'
+    });
+
+    await queryInterface.addIndex('cbt_tes_topik_set', ['tset_id'], { name: 'tset_id' });
     await queryInterface.addIndex('cbt_tes_topik_set', ['tset_tes_id'], { name: 'p_tsubset_test_id' });
     await queryInterface.addIndex('cbt_tes_topik_set', ['tset_topik_id'], { name: 'tsubset_subject_id' });
+    await queryInterface.sequelize.query('ALTER TABLE `cbt_tes_topik_set` AUTO_INCREMENT = 6;');
   },
 
   down: async (queryInterface, Sequelize) => {

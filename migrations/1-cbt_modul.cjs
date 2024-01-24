@@ -9,7 +9,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.BIGINT.UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
       },
       modul_nama: {
         type: Sequelize.STRING,
@@ -21,9 +21,9 @@ module.exports = {
         defaultValue: 0
       },
     });
-    await queryInterface.addIndex('cbt_modul', ['modul_id'], { name: 'PRIMARY' });
+    await queryInterface.addIndex('cbt_modul', ['modul_id'], { name: 'modul_id' });
     await queryInterface.addIndex('cbt_modul', ['modul_nama'], { unique: true, name: 'ak_module_name' });
-    await queryInterface.sequelize.query('ALTER TABLE `cbt_modul` AUTO_INCREMENT = 10;');
+    // await queryInterface.sequelize.query('ALTER TABLE `cbt_modul` AUTO_INCREMENT = 10;');
 
   },
 

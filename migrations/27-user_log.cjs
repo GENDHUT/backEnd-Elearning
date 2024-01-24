@@ -20,12 +20,12 @@ module.exports = {
         allowNull: false,
       },
       ts: {
-        type: Sequelize.TIMESTAMP,
+        type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
-    await queryInterface.addIndex('user_log', ['id'], { name: 'PRIMARY' });
+    await queryInterface.addIndex('user_log', ['id'], { name: 'id' });
   },
 
   down: async (queryInterface, Sequelize) => {

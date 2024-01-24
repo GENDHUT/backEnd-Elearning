@@ -9,23 +9,23 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.BIGINT.UNSIGNED
+        type: Sequelize.BIGINT(20).UNSIGNED,
       },
       tesuser_tes_id: {
-        type: Sequelize.BIGINT.UNSIGNED,
+        type: Sequelize.BIGINT(20).UNSIGNED,
         allowNull: false,
-        references: {
-          model: 'cbt_tes',
-          key: 'tes_id'
-        }
+        // references: {
+        //   model: 'cbt_tes',
+        //   key: 'tes_id'
+        // }
       },
       tesuser_user_id: {
-        type: Sequelize.BIGINT.UNSIGNED,
+        type: Sequelize.BIGINT(20).UNSIGNED,
         allowNull: false,
-        references: {
-          model: 'cbt_tes', 
-          key: 'tes_id'
-        }
+        // references: {
+        //   model: 'cbt_tes', 
+        //   key: 'tes_id'
+        // }
       },
       tesuser_status: {
         type: Sequelize.SMALLINT.UNSIGNED,
@@ -55,10 +55,36 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-    await queryInterface.addIndex('cbt_tes_user', ['tesuser_id'], { name: 'PRIMARY' });
+    await queryInterface.addConstraint('cbt_tes_user', {
+      fields: ['tesuser_tes_id'],
+      type: 'foreign key',
+      name: 'cbt_tes_user_ibfk_1',
+      references: {
+        table: 'cbt_tes',
+        field: 'tes_id'
+      },
+      onDelete: 'cascade',  
+      // onUpdate: 'no action'
+
+    });
+
+    await queryInterface.addConstraint('cbt_tes_user', {
+      fields: ['tesuser_user_id'],
+      type: 'foreign key',
+      name: 'cbt_tes_user_ibfk_2',
+      references: {
+        table: 'cbt_user',
+        field: 'user_id'
+      },
+      onDelete: 'cascade',
+      onUpdate: 'no action'
+    });
+
+    await queryInterface.addIndex('cbt_tes_user', ['tesuser_id'], { name: 'tesuser_id' });
     await queryInterface.addIndex('cbt_tes_user', ['tesuser_tes_id', 'tesuser_user_id', 'tesuser_status'], { name: 'ak_testuser', unique: true });
     await queryInterface.addIndex('cbt_tes_user', ['tesuser_user_id'], { name: 'p_testuser_user_id' });
     await queryInterface.addIndex('cbt_tes_user', ['tesuser_tes_id'], { name: 'p_testuser_test_id' });
+    await queryInterface.sequelize.query('ALTER TABLE `cbt_tes_user` AUTO_INCREMENT = 5;');
   },
 
   down: async (queryInterface, Sequelize) => {
