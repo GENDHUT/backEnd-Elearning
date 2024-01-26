@@ -14,5 +14,5 @@ Jangan Lupa Instal Dependency
 npm install
 ```
 
-Jangan Lupa Mengganti example.env menjadi development.env
+Jangan Lupa Mengganti example.env menjadi .env
 
